@@ -31,21 +31,38 @@ function scenarioQuestions(grade: 2 | 3): Question[] {
   );
 }
 
+/** 本試験と同様に6分野から均等に出題（不足分は他分野から補充） */
+function pickByField(pool: Question[], total: number): Question[] {
+  const fields: FieldId[] = ['life', 'risk', 'finance', 'tax', 'estate', 'inherit'];
+  const per = Math.floor(total / fields.length);
+  const picked: Question[] = [];
+  const rest: Question[] = [];
+  for (const f of fields) {
+    const qs = shuffle(pool.filter((q) => q.field === f));
+    picked.push(...qs.slice(0, per));
+    rest.push(...qs.slice(per));
+  }
+  picked.push(...shuffle(rest).slice(0, Math.max(0, total - picked.length)));
+  return picked;
+}
+
 function buildExam(spec: ExamSpec, qs: Question[]): Question[] {
   if (spec.key === 'g3-gakka') {
-    const tf = shuffle(qs.filter((q) => q.grade === 3 && q.format === 'truefalse')).slice(0, 30);
-    const sc = shuffle(qs.filter((q) => q.grade === 3 && q.format === 'single')).slice(0, 30);
+    // 本試験：○×式30問 ＋ 三答択一式30問
+    const tf = pickByField(qs.filter((q) => q.grade === 3 && q.format === 'truefalse'), 30);
+    const sc = pickByField(qs.filter((q) => q.grade === 3 && q.format === 'single'), 30);
     return [...tf, ...sc];
   }
   if (spec.key === 'g2-gakka') {
-    const main = shuffle(qs.filter((q) => q.grade === 2 && q.format !== 'numeric'));
-    const fill = shuffle(qs.filter((q) => q.grade === 3 && q.format === 'single'));
-    return [...main, ...fill].slice(0, spec.questions);
+    // 本試験：四答択一式60問
+    return shuffle(pickByField(qs.filter((q) => q.grade === 2 && q.format === 'single'), spec.questions));
   }
   const g = spec.grade;
   const calc = qs.filter((q) => q.format === 'numeric' && (g === 2 || q.grade === 3));
   const cases = scenarioQuestions(g);
-  return shuffle([...calc, ...cases]).slice(0, spec.questions);
+  // 実技：事例（実務シミュレーション）を優先し、残りを分野均等の計算問題で構成
+  const caseCount = Math.min(cases.length, Math.floor(spec.questions / 2));
+  return shuffle([...shuffle(cases).slice(0, caseCount), ...pickByField(calc, spec.questions - caseCount)]);
 }
 
 export function MockMenu() {
