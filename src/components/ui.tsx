@@ -1,4 +1,4 @@
-import { useEffect, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import type { Exhibit, LawMeta } from '../types';
 import { useGame } from '../state/store';
 
@@ -106,5 +106,49 @@ export function Exhibits({ items }: { items?: Exhibit[] }) {
         </figure>
       ))}
     </>
+  );
+}
+
+/**
+ * ファイル保存ができない環境（埋め込み表示など）向けに、内容をテキストで表示してコピーできるようにする。
+ * 読み込み側は onImport を渡すと「貼り付けて読み込む」欄になる。
+ */
+export function TextTransfer({ text, onImport, onClose }: { text?: string; onImport?: (t: string) => void; onClose: () => void }) {
+  const [value, setValue] = useState(text ?? '');
+  const [note, setNote] = useState('');
+  return (
+    <div className="panel">
+      <label className="field" htmlFor="transfer-text">
+        {onImport ? '保存しておいたテキストを貼り付けてください' : 'このテキストをメモ帳などに保存してください'}
+        <textarea id="transfer-text" value={value} readOnly={!onImport} onChange={(e) => setValue(e.target.value)} style={{ minHeight: 120, fontSize: 12 }} onFocus={(e) => !onImport && e.currentTarget.select()} />
+      </label>
+      <div className="row wrap">
+        {onImport ? (
+          <button className="btn sm" disabled={!value.trim()} onClick={() => onImport(value)}>
+            読み込む
+          </button>
+        ) : (
+          <button
+            className="btn sm"
+            onClick={(e) => {
+              const area = (e.currentTarget.closest('.panel') as HTMLElement).querySelector('textarea')!;
+              navigator.clipboard?.writeText(value).then(
+                () => setNote('コピーしました'),
+                () => {
+                  area.select();
+                  setNote('選択しました。長押し（Ctrl+C）でコピーしてください');
+                },
+              ) ?? (area.select(), setNote('選択しました。長押し（Ctrl+C）でコピーしてください'));
+            }}
+          >
+            コピー
+          </button>
+        )}
+        <button className="btn ghost sm" onClick={onClose}>
+          閉じる
+        </button>
+        {note && <span className="small muted">{note}</span>}
+      </div>
+    </div>
   );
 }

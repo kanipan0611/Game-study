@@ -5,7 +5,7 @@ import { FIELD_MAP } from '../data/fields';
 import { bossUnlocked, shuffle, stagePool } from '../engine/stages';
 import { QuestionCard } from '../components/QuestionCard';
 import { Back, Bar, Celebrate } from '../components/ui';
-import { go } from '../router';
+import { go, restart } from '../router';
 
 const PLAYER_HP = 3;
 
@@ -97,7 +97,7 @@ export function Boss({ field, grade }: { field: FieldId; grade: 2 | 3 }) {
           <p className="muted">間違えた問題は復習リストに入りました。解説を読み直してから再挑戦しよう。</p>
           <div className="grid2">
             <button className="btn ghost" onClick={() => go(`dungeon/${field}`)}>撤退する</button>
-            <button className="btn" onClick={() => window.location.reload()}>再挑戦</button>
+            <button className="btn" onClick={restart}>再挑戦</button>
           </div>
         </div>
       </div>

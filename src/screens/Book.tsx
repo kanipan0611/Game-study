@@ -3,7 +3,7 @@ import type { BookEntry, FieldId, Grade } from '../types';
 import { useGame } from '../state/store';
 import { FIELDS, FIELD_MAP } from '../data/fields';
 import { BOOK_HEADERS, bookToCsv, csvToBook, download, toCsv } from '../engine/csv';
-import { Bar, pct } from '../components/ui';
+import { Bar, pct, TextTransfer } from '../components/ui';
 
 const PRESETS = ['史上最強のFP3級問題集', '史上最強のFP2級AFP問題集', '史上最強のFP3級テキスト', '史上最強のFP2級AFPテキスト'];
 const STATUS: Record<BookEntry['status'], { t: string; c: string }> = {
@@ -25,6 +25,7 @@ export function Book() {
   const [filter, setFilter] = useState<Filter>('all');
   const [adding, setAdding] = useState(false);
   const [msg, setMsg] = useState('');
+  const [csvText, setCsvText] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const entries = state.bookEntries.filter((e) =>
@@ -71,7 +72,7 @@ export function Book() {
           <button className="btn ghost sm" onClick={() => fileRef.current?.click()}>
             CSV取込
           </button>
-          <button className="btn ghost sm" disabled={!all.length} onClick={() => download('fpquest-book.csv', bookToCsv(all))}>
+          <button className="btn ghost sm" disabled={!all.length} onClick={() => { const c = bookToCsv(all); download('fpquest-book.csv', c); setCsvText(c.replace(/^\uFEFF/, '')); }}>
             CSV出力
           </button>
           <button
@@ -90,6 +91,7 @@ export function Book() {
         {msg && <div className="small" style={{ marginTop: 6 }}>{msg}</div>}
       </div>
 
+      {csvText && <TextTransfer text={csvText} onClose={() => setCsvText(null)} />}
       {adding && <AddForm onDone={() => setAdding(false)} />}
 
       <div className="tabs">
@@ -119,6 +121,7 @@ export function Book() {
 function BookRow({ e }: { e: BookEntry }) {
   const { actions } = useGame();
   const [open, setOpen] = useState(false);
+  const [confirmDel, setConfirmDel] = useState(false);
   const f = FIELD_MAP[e.field];
   const st = STATUS[e.status];
   const c = e.attempts.filter((a) => a.correct).length;
@@ -190,9 +193,15 @@ function BookRow({ e }: { e: BookEntry }) {
                 ⚔ 関連ステージで類題演習
               </a>
             )}
-            <button className="btn danger sm" onClick={() => window.confirm('この記録を削除しますか？') && actions.deleteBook(e.id)}>
-              削除
-            </button>
+            {confirmDel ? (
+              <button className="btn danger sm" onClick={() => actions.deleteBook(e.id)}>
+                本当に削除する
+              </button>
+            ) : (
+              <button className="btn danger sm" onClick={() => setConfirmDel(true)}>
+                削除
+              </button>
+            )}
           </div>
         </div>
       )}

@@ -23,6 +23,7 @@
 
 * { box-sizing: border-box; }
 html, body, #root { height: 100%; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 25; background: #070e22; }
 body {
   margin: 0;
   font-family: var(--font);
@@ -35,13 +36,13 @@ button { font: inherit; color: inherit; }
 a { color: var(--gold-400); }
 
 .app { max-width: 760px; margin: 0 auto; min-height: 100%; display: flex; flex-direction: column; }
-.main { flex: 1; min-width: 0; padding: 12px 16px calc(84px + env(safe-area-inset-bottom)); overflow-wrap: anywhere; }
+.main { flex: 1; min-width: 0; padding-block: 12px calc(84px + env(safe-area-inset-bottom, 0px)); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); overflow-wrap: anywhere; }
 
 /* ---------- ヘッダー ---------- */
 .topbar {
-  position: sticky; top: 0; z-index: 20;
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
   display: flex; align-items: center; gap: 10px;
-  padding: calc(8px + env(safe-area-inset-top)) 16px 8px;
+  padding-block: 8px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
   background: linear-gradient(180deg, rgba(7, 14, 34, 0.97), rgba(11, 21, 48, 0.9));
   border-bottom: 1px solid rgba(226, 179, 60, 0.35);
   backdrop-filter: blur(6px);

@@ -4,6 +4,7 @@ import { useGame } from '../state/store';
 import { ACHIEVEMENTS } from '../data/meta';
 import { BUILTIN_QUESTIONS } from '../data/questions';
 import { BASIS_DATE } from '../data/fields';
+import { TextTransfer } from '../components/ui';
 import { EXAM_SOURCE } from '../data/examSpecs';
 import { csvToQuestions, download, QUESTION_HEADERS, toCsv } from '../engine/csv';
 import { levelInfo, titleFor, TITLES } from '../engine/xp';
@@ -12,6 +13,8 @@ import { XP } from '../engine/xp';
 export function Menu() {
   const { state, actions } = useGame();
   const [msg, setMsg] = useState('');
+  const [confirmReset, setConfirmReset] = useState(false);
+  const [transfer, setTransfer] = useState<null | 'out' | 'in'>(null);
   const saveRef = useRef<HTMLInputElement>(null);
   const qRef = useRef<HTMLInputElement>(null);
   const lv = levelInfo(state.xp).level;
@@ -138,15 +141,37 @@ export function Menu() {
           </select>
         </label>
         <div className="row wrap">
-          <button className="btn ghost sm" onClick={() => download(`fpquest-save-${new Date().toISOString().slice(0, 10)}.json`, JSON.stringify(state), 'application/json')}>
+          <button
+            className="btn ghost sm"
+            onClick={() => {
+              download(`fpquest-save-${new Date().toISOString().slice(0, 10)}.json`, JSON.stringify(state), 'application/json');
+              setTransfer('out');
+            }}
+          >
             セーブをエクスポート
+          </button>
+          <button className="btn ghost sm" onClick={() => setTransfer('in')}>
+            テキストから読み込み
           </button>
           <button className="btn ghost sm" onClick={() => saveRef.current?.click()}>
             セーブを読み込み
           </button>
-          <button className="btn danger sm" onClick={() => window.confirm('すべての進捗を削除します。よろしいですか？') && actions.reset()}>
-            データ初期化
-          </button>
+          {confirmReset ? (
+            <button
+              className="btn danger sm"
+              onClick={() => {
+                actions.reset();
+                setConfirmReset(false);
+                setMsg('すべての進捗を削除しました。');
+              }}
+            >
+              本当に全データを削除する
+            </button>
+          ) : (
+            <button className="btn danger sm" onClick={() => setConfirmReset(true)}>
+              データ初期化
+            </button>
+          )}
           <input
             ref={saveRef}
             type="file"
@@ -166,7 +191,29 @@ export function Menu() {
             }}
           />
         </div>
-        <p className="muted small">進捗はこの端末のブラウザ（LocalStorage）に保存されます。機種変更時はエクスポートしてください。</p>
+        {transfer && (
+          <TextTransfer
+            key={transfer}
+            text={transfer === 'out' ? JSON.stringify(state) : undefined}
+            onClose={() => setTransfer(null)}
+            onImport={
+              transfer === 'in'
+                ? (t) => {
+                    try {
+                      const data = JSON.parse(t) as GameState;
+                      if (typeof data.xp !== 'number' || !data.records) throw new Error();
+                      actions.replaceAll(data);
+                      setTransfer(null);
+                      setMsg('セーブデータを読み込みました。');
+                    } catch {
+                      setMsg('読み込みに失敗しました（形式が違います）。');
+                    }
+                  }
+                : undefined
+            }
+          />
+        )}
+        <p className="muted small">進捗はこの端末のブラウザに保存されます。別の端末に移すときは「セーブをエクスポート」で表示されるテキストを保存し、移行先の「テキストから読み込み」に貼り付けてください。</p>
       </div>
       {msg && <div className="toast" onClick={() => setMsg('')} style={{ position: 'fixed', bottom: 90, left: 16, right: 16, margin: '0 auto' }}>{msg}</div>}
     </div>

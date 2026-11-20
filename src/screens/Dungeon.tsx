@@ -8,7 +8,7 @@ import {
 } from '../engine/stages';
 import { QuizSession, type SessionSummary } from '../components/QuizSession';
 import { Back, Bar, Celebrate, pct } from '../components/ui';
-import { go } from '../router';
+import { go, restart } from '../router';
 
 export function Dungeon({ field }: { field: FieldId }) {
   const { state, questions } = useGame();
@@ -166,7 +166,7 @@ export function Play({ field, kind, browse }: { field: FieldId; kind: StageKind;
           <button className="btn ghost" onClick={() => go(`dungeon/${field}`)}>
             ダンジョンへ
           </button>
-          <button className="btn" onClick={() => window.location.reload()}>
+          <button className="btn" onClick={restart}>
             もう一度
           </button>
         </div>

@@ -48,7 +48,7 @@ function useStudyTimer() {
 
 export function App() {
   const { state, questions } = useGame();
-  const { parts, query } = useRoute();
+  const { parts, query, nonce } = useRoute();
   useStudyTimer();
   const lv = levelInfo(state.xp);
   const streak = streakOf(state.days);
@@ -59,11 +59,11 @@ export function App() {
   switch (p0) {
     case 'map': screen = <WorldMap />; break;
     case 'dungeon': screen = <Dungeon field={p1 as FieldId} />; break;
-    case 'play': screen = <Play key={parts.join('/') + query.toString()} field={p1 as FieldId} kind={p2 as StageKind} browse={query.get('browse') === '1'} />; break;
-    case 'boss': screen = <Boss key={parts.join('/')} field={p1 as FieldId} grade={Number(p2) === 2 ? 2 : 3} />; break;
+    case 'play': screen = <Play key={parts.join('/') + query.toString() + nonce} field={p1 as FieldId} kind={p2 as StageKind} browse={query.get('browse') === '1'} />; break;
+    case 'boss': screen = <Boss key={parts.join('/') + nonce} field={p1 as FieldId} grade={Number(p2) === 2 ? 2 : 3} />; break;
     case 'review': screen = <Review />; break;
     case 'calc': screen = p1 ? <CalcDrill key={p1} kind={p1} /> : <CalcMenu />; break;
-    case 'sim': screen = p1 ? <SimPlay key={p1} id={p1} /> : <SimMenu />; break;
+    case 'sim': screen = p1 ? <SimPlay key={p1 + nonce} id={p1} /> : <SimMenu />; break;
     case 'mock': screen = p1 ? <MockExam key={p1} specKey={p1} /> : <MockMenu />; break;
     case 'drill': screen = <ExhibitDrill />; break;
     case 'book': screen = <Book />; break;

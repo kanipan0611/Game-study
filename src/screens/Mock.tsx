@@ -143,6 +143,7 @@ export function MockExam({ specKey }: { specKey: string }) {
   const [ans, setAns] = useState<Record<string, Ans>>({});
   const [result, setResult] = useState<MockResult | null>(null);
   const [reviewIdx, setReviewIdx] = useState<number | null>(null);
+  const [confirmFinish, setConfirmFinish] = useState(false);
   const startAt = useRef(0);
   // タイマーからの自動採点でも最新の解答を参照できるよう ref に保持
   const ansRef = useRef(ans);
@@ -339,15 +340,26 @@ export function MockExam({ specKey }: { specKey: string }) {
         <span className="small">
           解答 {answeredCount}/{exam.length}
         </span>
-        <button
-          className="btn sm"
-          onClick={() => {
-            if (window.confirm(`${exam.length - answeredCount}問が未解答です。採点しますか？`)) finish();
-          }}
-        >
-          採点する
-        </button>
+        {confirmFinish ? (
+          <span className="row">
+            <button className="btn ghost sm" onClick={() => setConfirmFinish(false)}>
+              戻る
+            </button>
+            <button className="btn sm" onClick={finish}>
+              採点を確定
+            </button>
+          </span>
+        ) : (
+          <button className="btn sm" onClick={() => setConfirmFinish(true)}>
+            採点する
+          </button>
+        )}
       </div>
+      {confirmFinish && (
+        <div className="warnbox" style={{ marginBottom: 10 }}>
+          {exam.length - answeredCount > 0 ? `未解答が${exam.length - answeredCount}問あります。` : 'すべて解答済みです。'}「採点を確定」で試験を終了して採点します。
+        </div>
+      )}
       <QuestionCard
         key={q.id}
         q={q}

@@ -4,7 +4,7 @@ import { SCENARIOS } from '../data/scenarios';
 import { FIELD_MAP } from '../data/fields';
 import { shuffle } from '../engine/stages';
 import { Back, Celebrate, LawBadge } from '../components/ui';
-import { go } from '../router';
+import { go, restart } from '../router';
 
 export function SimMenu() {
   const { state } = useGame();
@@ -79,7 +79,7 @@ export function SimPlay({ id }: { id: string }) {
         <p className="muted">顧客はまだ少し不安そうです。解説を読み直して再挑戦しよう。</p>
         <div className="grid2">
           <button className="btn ghost" onClick={() => go('sim')}>一覧へ</button>
-          <button className="btn" onClick={() => window.location.reload()}>再挑戦</button>
+          <button className="btn" onClick={restart}>再挑戦</button>
         </div>
       </div>
     );
