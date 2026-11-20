@@ -6,6 +6,7 @@ import { riskQuestions2 } from './risk2';
 import { financeQuestions } from './finance';
 import { financeQuestions2 } from './finance2';
 import { taxQuestions } from './tax';
+import { taxQuestions2 } from './tax2';
 import { estateQuestions } from './estate';
 import { inheritQuestions } from './inherit';
 
@@ -18,6 +19,7 @@ export const BUILTIN_QUESTIONS: Question[] = [
   ...financeQuestions,
   ...financeQuestions2,
   ...taxQuestions,
+  ...taxQuestions2,
   ...estateQuestions,
   ...inheritQuestions,
 ];

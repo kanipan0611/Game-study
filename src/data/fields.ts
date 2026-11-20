@@ -82,6 +82,7 @@ export const FIELDS: FieldDef[] = [
       { id: 'tax-retire', name: '退職所得', grade: 3, requires: ['tax-income'] },
       { id: 'tax-deduct', name: '所得控除', grade: 3, requires: ['tax-income'] },
       { id: 'tax-calc', name: '税額計算と申告', grade: 3, requires: ['tax-deduct'] },
+      { id: 'tax-credit', name: '税額控除', grade: 3, requires: ['tax-calc'] },
       { id: 'tax-offset', name: '損益通算（応用）', grade: 2, requires: ['tax-income'] },
       { id: 'tax-corp', name: '法人税・消費税', grade: 2, requires: ['tax-calc'] },
     ],
