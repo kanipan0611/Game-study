@@ -95,6 +95,8 @@ export const FIELDS: FieldDef[] = [
       { id: 'est-register', name: '不動産登記と価格', grade: 3, requires: [] },
       { id: 'est-contract', name: '売買契約・借地借家法', grade: 3, requires: ['est-register'] },
       { id: 'est-law', name: '建築基準法', grade: 3, requires: ['est-register'] },
+      { id: 'est-city', name: '都市計画法', grade: 3, requires: ['est-register'] },
+      { id: 'est-condo', name: '区分所有法・農地法', grade: 3, requires: ['est-contract'] },
       { id: 'est-tax', name: '不動産の税金', grade: 3, requires: ['est-law'] },
       { id: 'est-transfer', name: '譲渡所得の特例', grade: 2, requires: ['est-tax'] },
       { id: 'est-invest', name: '不動産投資の判断', grade: 2, requires: ['est-transfer'] },

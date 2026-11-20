@@ -8,6 +8,7 @@ import { financeQuestions2 } from './finance2';
 import { taxQuestions } from './tax';
 import { taxQuestions2 } from './tax2';
 import { estateQuestions } from './estate';
+import { estateQuestions2 } from './estate2';
 import { inheritQuestions } from './inherit';
 
 /** 組込みのオリジナル問題（CSV インポート分は state 側で追加される） */
@@ -21,6 +22,7 @@ export const BUILTIN_QUESTIONS: Question[] = [
   ...taxQuestions,
   ...taxQuestions2,
   ...estateQuestions,
+  ...estateQuestions2,
   ...inheritQuestions,
 ];
 
