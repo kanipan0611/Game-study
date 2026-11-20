@@ -2,6 +2,7 @@ import type { FieldId, Question } from '../../types';
 import { lifeQuestions } from './life';
 import { lifeQuestions2 } from './life2';
 import { riskQuestions } from './risk';
+import { riskQuestions2 } from './risk2';
 import { financeQuestions } from './finance';
 import { taxQuestions } from './tax';
 import { estateQuestions } from './estate';
@@ -12,6 +13,7 @@ export const BUILTIN_QUESTIONS: Question[] = [
   ...lifeQuestions,
   ...lifeQuestions2,
   ...riskQuestions,
+  ...riskQuestions2,
   ...financeQuestions,
   ...taxQuestions,
   ...estateQuestions,
