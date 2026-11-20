@@ -31,10 +31,13 @@ export const FIELDS: FieldDef[] = [
       { id: 'life-coef', name: '6つの係数', grade: 3, requires: ['life-ethics'] },
       { id: 'life-cf', name: 'キャッシュフロー表', grade: 3, requires: ['life-ethics'] },
       { id: 'life-loan', name: '住宅ローン', grade: 3, requires: ['life-coef'] },
+      { id: 'life-edu', name: '教育資金計画', grade: 3, requires: ['life-cf'] },
       { id: 'life-shakai', name: '公的医療保険', grade: 3, requires: ['life-cf'] },
+      { id: 'life-koyo', name: '雇用保険・労災保険', grade: 3, requires: ['life-shakai'] },
       { id: 'life-pension', name: '公的年金', grade: 3, requires: ['life-shakai'] },
       { id: 'life-pension2', name: '年金の繰上げ・繰下げ（応用）', grade: 2, requires: ['life-pension'] },
       { id: 'life-dc', name: '確定拠出年金', grade: 2, requires: ['life-pension'] },
+      { id: 'life-corpfin', name: '中小法人の資金計画', grade: 2, requires: ['life-cf'] },
     ],
   },
   {

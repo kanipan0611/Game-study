@@ -1,5 +1,6 @@
 import type { FieldId, Question } from '../../types';
 import { lifeQuestions } from './life';
+import { lifeQuestions2 } from './life2';
 import { riskQuestions } from './risk';
 import { financeQuestions } from './finance';
 import { taxQuestions } from './tax';
@@ -9,6 +10,7 @@ import { inheritQuestions } from './inherit';
 /** 組込みのオリジナル問題（CSV インポート分は state 側で追加される） */
 export const BUILTIN_QUESTIONS: Question[] = [
   ...lifeQuestions,
+  ...lifeQuestions2,
   ...riskQuestions,
   ...financeQuestions,
   ...taxQuestions,
