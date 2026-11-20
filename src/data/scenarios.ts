@@ -1,5 +1,6 @@
 import type { FieldId, LawMeta } from '../types';
 import { law, SRC } from './fields';
+import { SCENARIOS2 } from './scenarios2';
 
 // 実務シミュレーション：FPとして顧客相談を解決する。
 // 各ステップは複数分野の知識を組み合わせて判断する。
@@ -23,7 +24,7 @@ export interface Scenario {
   steps: ScenarioStep[];
 }
 
-export const SCENARIOS: Scenario[] = [
+const BASE_SCENARIOS: Scenario[] = [
   {
     id: 'sc-house', title: '住宅購入を検討する30代夫婦', client: '佐倉さん夫妻（夫35歳・妻33歳）', avatar: '👫', grade: 3,
     profile: ['世帯年収：夫550万円・妻300万円（共働き）', '預貯金：800万円', '子ども：1人（2歳）', '検討物件：新築マンション 4,800万円'],
@@ -213,3 +214,6 @@ export const SCENARIOS: Scenario[] = [
     ],
   },
 ];
+
+/** 全シナリオ（3級→2級の順） */
+export const SCENARIOS: Scenario[] = [...BASE_SCENARIOS, ...SCENARIOS2].sort((a, b) => b.grade - a.grade);

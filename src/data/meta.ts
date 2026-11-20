@@ -1,4 +1,5 @@
 import type { GameState } from '../types';
+import { SCENARIOS } from './scenarios';
 
 // ---------------- デイリー / ウィークリー クエスト ----------------
 export interface QuestDef {
@@ -74,6 +75,7 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   { id: 'mock-pass3', name: '3級合格ライン', desc: '3級学科模試で合格基準を突破', emoji: '🎖️', check: (s) => s.mockHistory.some((m) => m.grade === 3 && m.part === 'gakka' && m.passed && !m.scaled) },
   { id: 'mock-pass2', name: '2級合格ライン', desc: '2級学科模試で合格基準を突破', emoji: '🏅', check: (s) => s.mockHistory.some((m) => m.grade === 2 && m.part === 'gakka' && m.passed && !m.scaled) },
   { id: 'calc-50', name: '電卓の達人', desc: '計算特訓で50問正解', emoji: '🧮', check: (s) => s.calcDrills.correct >= 50 },
-  { id: 'scenario-all', name: '頼れるFP', desc: '実務シミュレーションを全件解決', emoji: '🤝', check: (s) => Object.keys(s.scenariosCleared).length >= 5 },
+  { id: 'scenario-all', name: '頼れるFP', desc: '実務シミュレーションを全件解決', emoji: '🤝', check: (s) => SCENARIOS.every((x) => s.scenariosCleared[x.id]) },
+  { id: 'scenario-5', name: '駆け出しFP', desc: '実務シミュレーションを5件解決', emoji: '🗂️', check: (s) => Object.keys(s.scenariosCleared).length >= 5 },
   { id: 'book-10', name: '二刀流の学徒', desc: '史上最強問題集の記録を10件登録', emoji: '📚', check: (s) => s.bookEntries.length >= 10 },
 ];

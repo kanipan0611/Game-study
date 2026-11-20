@@ -13,18 +13,25 @@ export function SimMenu() {
       <Back to="" label="ホーム" />
       <div className="section-title">🤝 実務シミュレーション</div>
       <p className="muted small">あなたはFPアカデミーの相談員。顧客の状況を読み取り、複数分野の知識を組み合わせて最適な助言を選ぼう。全ステップで最適解を選ぶと「解決」（初回 +100XP）。</p>
-      {SCENARIOS.map((s) => (
-        <a key={s.id} className={`stage ${state.scenariosCleared[s.id] ? 'cleared' : ''}`} href={`#/sim/${s.id}`}>
-          <div className="icon">{s.avatar}</div>
-          <div className="body">
-            <div className="title">
-              {s.title} {state.scenariosCleared[s.id] && <span className="chip gold">解決済</span>}
-            </div>
-            <div className="muted small">
-              {s.client}・{s.grade}級レベル・{s.steps.length}ステップ
-            </div>
+      {([3, 2] as const).map((g) => (
+        <div key={g}>
+          <div className="section-title">
+            {g}級レベル（{SCENARIOS.filter((s) => s.grade === g && state.scenariosCleared[s.id]).length}/{SCENARIOS.filter((s) => s.grade === g).length} 解決）
           </div>
-        </a>
+          {SCENARIOS.filter((s) => s.grade === g).map((s) => (
+            <a key={s.id} className={`stage ${state.scenariosCleared[s.id] ? 'cleared' : ''}`} href={`#/sim/${s.id}`}>
+              <div className="icon">{s.avatar}</div>
+              <div className="body">
+                <div className="title">
+                  {s.title} {state.scenariosCleared[s.id] && <span className="chip gold">解決済</span>}
+                </div>
+                <div className="muted small">
+                  {s.client}・{s.steps.length}ステップ・{[...new Set(s.steps.flatMap((st) => st.fields))].map((f) => FIELD_MAP[f].emoji).join('')}
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
       ))}
     </div>
   );
@@ -97,11 +104,11 @@ export function SimPlay({ id }: { id: string }) {
         <div className="scenario-box">{sc.request}</div>
       </div>
       <div className="panel">
-        <div className="row between">
+        <div className="row wrap" style={{ gap: 6 }}>
           <span className="chip gold">
             STEP {step + 1}/{sc.steps.length}
           </span>
-          <span className="row">
+          <span className="row wrap" style={{ gap: 4 }}>
             {st.fields.map((f) => (
               <span key={f} className="chip small">
                 {FIELD_MAP[f].emoji}
