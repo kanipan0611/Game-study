@@ -3,7 +3,7 @@ import type { Question } from '../types';
 import { checkNumber, yen } from '../engine/calcGenerators';
 import { shuffle } from '../engine/stages';
 import { FIELD_MAP } from '../data/fields';
-import { LawBadge } from './ui';
+import { Exhibits, LawBadge } from './ui';
 
 const FORMAT_LABEL: Record<Question['format'], string> = {
   truefalse: '○×問題',
@@ -74,6 +74,7 @@ export function QuestionCard({ q, index, total, onSubmit, reveal, examMode, foot
           </span>
           <span className="chip gold">{q.grade}級</span>
           <span className="chip">{FORMAT_LABEL[q.format]}</span>
+          {q.exhibit && <span className="chip">📄 資料</span>}
           {q.law.status !== 'verified' && <span className="chip warn">要確認</span>}
         </div>
         {index !== undefined && total !== undefined && (
@@ -83,6 +84,7 @@ export function QuestionCard({ q, index, total, onSubmit, reveal, examMode, foot
         )}
       </div>
       {q.scenario && <div className="scenario-box">{q.scenario}</div>}
+      <Exhibits items={q.exhibit} />
       <div className="qprompt">{q.prompt}</div>
 
       {q.format === 'numeric' ? (

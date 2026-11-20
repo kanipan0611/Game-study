@@ -6,7 +6,7 @@ import { SCENARIOS } from '../data/scenarios';
 import { FIELDS, FIELD_MAP } from '../data/fields';
 import { shuffle } from '../engine/stages';
 import { Explanation, isCorrect, QuestionCard } from '../components/QuestionCard';
-import { Back, Bar, pct } from '../components/ui';
+import { Back, Bar, Exhibits, pct } from '../components/ui';
 import { go } from '../router';
 
 /** 実務シミュレーションの各ステップを事例問題に変換（実技模試で使用） */
@@ -58,11 +58,18 @@ function buildExam(spec: ExamSpec, qs: Question[]): Question[] {
     return shuffle(pickByField(qs.filter((q) => q.grade === 2 && q.format === 'single'), spec.questions));
   }
   const g = spec.grade;
-  const calc = qs.filter((q) => q.format === 'numeric' && (g === 2 || q.grade === 3));
+  const fit = (q: Question) => g === 2 || q.grade === 3;
+  const exhibits = qs.filter((q) => q.exhibit && fit(q));
+  const calc = qs.filter((q) => !q.exhibit && q.format === 'numeric' && fit(q));
   const cases = scenarioQuestions(g);
-  // 実技：事例（実務シミュレーション）を優先し、残りを分野均等の計算問題で構成
-  const caseCount = Math.min(cases.length, Math.floor(spec.questions / 2));
-  return shuffle([...shuffle(cases).slice(0, caseCount), ...pickByField(calc, spec.questions - caseCount)]);
+  // 本試験の実技は「資料を読み取って答える」問題が中心：資料問題 約4割・事例 約3割・計算 約3割
+  const nEx = Math.min(exhibits.length, Math.round(spec.questions * 0.4));
+  const nCase = Math.min(cases.length, Math.round(spec.questions * 0.3));
+  return shuffle([
+    ...pickByField(exhibits, nEx),
+    ...shuffle(cases).slice(0, nCase),
+    ...pickByField(calc, spec.questions - nEx - nCase),
+  ]);
 }
 
 export function MockMenu() {
@@ -240,6 +247,7 @@ export function MockExam({ specKey }: { specKey: string }) {
               第{reviewIdx + 1}問 ／ {FIELD_MAP[q.field].name}
             </div>
             {q.scenario && <div className="scenario-box">{q.scenario}</div>}
+            <Exhibits items={q.exhibit} />
             <div className="qprompt">{q.prompt}</div>
             <Explanation q={q} correct={(a.picked.length > 0 || a.num !== '') && isCorrect(q, a.picked, a.num)} picked={a.picked} num={a.num} />
           </div>

@@ -39,6 +39,16 @@ export interface Choice {
   why: string;
 }
 
+/** 実技試験の「資料」（キャッシュフロー表・保険証券・登記事項証明書・親族関係図など） */
+export interface Exhibit {
+  title: string;
+  /** 1行目を見出しとする表 */
+  table?: string[][];
+  /** 図・文書を行単位で表す（親族関係図など） */
+  lines?: string[];
+  note?: string;
+}
+
 export interface Question {
   id: string; // 例: 'life-3-001'
   field: FieldId;
@@ -48,6 +58,8 @@ export interface Question {
   topic: string; // スキルツリーのノードIDと対応
   /** 事例問題の設例文 */
   scenario?: string;
+  /** 資料（実技の資料読み取り問題） */
+  exhibit?: Exhibit[];
   prompt: string;
   choices?: Choice[];
   /** truefalse: 'o' | 'x' / single, case: choice id / multi: choice ids */

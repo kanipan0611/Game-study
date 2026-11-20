@@ -1,5 +1,5 @@
 import { useEffect, type ReactNode } from 'react';
-import type { LawMeta } from '../types';
+import type { Exhibit, LawMeta } from '../types';
 import { useGame } from '../state/store';
 
 export function Bar({ value, tone, thin }: { value: number; tone?: 'green' | 'red'; thin?: boolean }) {
@@ -81,3 +81,30 @@ export function Back({ to, label = '戻る' }: { to: string; label?: string }) {
 }
 
 export const pct = (x: number) => `${Math.round(x * 100)}%`;
+
+/** 実技の資料（表・図・文書）を書類風に表示 */
+export function Exhibits({ items }: { items?: Exhibit[] }) {
+  if (!items?.length) return null;
+  return (
+    <>
+      {items.map((ex, i) => (
+        <figure key={i} className="exhibit">
+          <figcaption>{ex.title}</figcaption>
+          {ex.table && (
+            <div className="exhibit-scroll">
+              <table>
+                <tbody>
+                  {ex.table.map((row, r) => (
+                    <tr key={r}>{row.map((c, k) => (r === 0 ? <th key={k}>{c}</th> : <td key={k}>{c}</td>))}</tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+          {ex.lines && <pre className="exhibit-lines">{ex.lines.join('\n')}</pre>}
+          {ex.note && <div className="exhibit-note">{ex.note}</div>}
+        </figure>
+      ))}
+    </>
+  );
+}

@@ -1,10 +1,11 @@
-import type { FieldId, Grade, LawMeta, Question } from '../../types';
+import type { Exhibit, FieldId, Grade, LawMeta, Question } from '../../types';
 
 // 問題データを簡潔に記述するためのビルダー。
 // 出力は純粋な Question オブジェクト（CSV と相互変換可能）。
 
 interface Base {
   id: string;
+  exhibit?: Exhibit[];
   grade: Grade;
   topic: string;
   prompt: string;
@@ -93,6 +94,7 @@ interface Opt {
   related?: string;
   bridge?: { grade3?: string; grade2?: string };
   scenario?: string;
+  exhibit?: Exhibit[];
   law?: LawMeta;
   difficulty?: 1 | 2 | 3;
   tolerance?: number;
@@ -107,7 +109,7 @@ export function bank(field: FieldId, prefix: string, grade: Grade, laws: Record<
     return {
       id: `${prefix}-${grade}-${++seq}`,
       grade, topic, prompt, explanation, law,
-      related: o?.related, bridge: o?.bridge, scenario: o?.scenario, difficulty: o?.difficulty,
+      related: o?.related, bridge: o?.bridge, scenario: o?.scenario, exhibit: o?.exhibit, difficulty: o?.difficulty,
     };
   };
   const tfWhy = (ans: 'o' | 'x', e: string, w?: string) => w ?? (ans === 'o' ? `記述は適切です。${e}` : `記述には誤りがあります。${e}`);

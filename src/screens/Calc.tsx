@@ -13,6 +13,11 @@ export function CalcMenu() {
       <p className="muted small">
         数値が毎回ランダムに変わるので「答えの丸暗記」ができません。式と途中過程を確認しながら、試験で必ず出る計算を体に染み込ませましょう。（正解1問 +6XP、1日120XPまで）
       </p>
+      <a className="navcard" href="#/drill" style={{ marginBottom: 10 }}>
+        <div className="e">📄</div>
+        <div className="t">資料読み取り演習（実技対策）</div>
+        <div className="muted small">キャッシュフロー表・保険証券・源泉徴収票・登記事項証明書・親族関係図など</div>
+      </a>
       <div className="navgrid">
         {CALC_KINDS.map((k) => {
           const st = state.calcDrills.byKind[k.id];

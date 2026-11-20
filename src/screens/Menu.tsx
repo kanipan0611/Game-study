@@ -24,6 +24,7 @@ export function Menu() {
         <a className="navcard" href="#/sim"><div className="e">🤝</div><div className="t">実務シミュレーション</div></a>
         <a className="navcard" href="#/mock"><div className="e">🎓</div><div className="t">模擬試験</div></a>
         <a className="navcard" href="#/skills"><div className="e">🌳</div><div className="t">スキルツリー</div></a>
+        <a className="navcard" href="#/drill"><div className="e">📄</div><div className="t">資料読み取り演習</div></a>
       </div>
 
       <div className="section-title">🏅 称号</div>

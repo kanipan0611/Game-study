@@ -17,6 +17,7 @@ import { MockExam, MockMenu } from './screens/Mock';
 import { Book } from './screens/Book';
 import { SkillTree, Stats } from './screens/Progress';
 import { Menu } from './screens/Menu';
+import { ExhibitDrill } from './screens/ExhibitDrill';
 
 const TABS = [
   { to: '', ico: '🏠', label: 'ホーム', match: ['', 'skills'] },
@@ -24,7 +25,7 @@ const TABS = [
   { to: 'review', ico: '🔁', label: '復習', match: ['review'] },
   { to: 'book', ico: '📚', label: '問題集', match: ['book'] },
   { to: 'stats', ico: '📊', label: '記録', match: ['stats'] },
-  { to: 'menu', ico: '☰', label: 'メニュー', match: ['menu', 'calc', 'sim', 'mock'] },
+  { to: 'menu', ico: '☰', label: 'メニュー', match: ['menu', 'calc', 'sim', 'mock', 'drill'] },
 ];
 
 /** 学習時間の計測：画面が表示中かつ直近2分以内に操作があれば加算 */
@@ -64,6 +65,7 @@ export function App() {
     case 'calc': screen = p1 ? <CalcDrill key={p1} kind={p1} /> : <CalcMenu />; break;
     case 'sim': screen = p1 ? <SimPlay key={p1} id={p1} /> : <SimMenu />; break;
     case 'mock': screen = p1 ? <MockExam key={p1} specKey={p1} /> : <MockMenu />; break;
+    case 'drill': screen = <ExhibitDrill />; break;
     case 'book': screen = <Book />; break;
     case 'skills': screen = <SkillTree />; break;
     case 'stats': screen = <Stats />; break;

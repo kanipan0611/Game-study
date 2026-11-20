@@ -11,6 +11,7 @@ import { estateQuestions } from './estate';
 import { estateQuestions2 } from './estate2';
 import { inheritQuestions } from './inherit';
 import { inheritQuestions2 } from './inherit2';
+import { jitsugiQuestions } from './jitsugi';
 
 /** 組込みのオリジナル問題（CSV インポート分は state 側で追加される） */
 export const BUILTIN_QUESTIONS: Question[] = [
@@ -26,6 +27,7 @@ export const BUILTIN_QUESTIONS: Question[] = [
   ...estateQuestions2,
   ...inheritQuestions,
   ...inheritQuestions2,
+  ...jitsugiQuestions,
 ];
 
 export const QUESTION_BY_ID: Record<string, Question> = Object.fromEntries(
