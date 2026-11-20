@@ -66,7 +66,10 @@ export const FIELDS: FieldDef[] = [
       { id: 'fin-stock', name: '株式と投資指標', grade: 3, requires: ['fin-econ'] },
       { id: 'fin-fund', name: '投資信託', grade: 3, requires: ['fin-stock'] },
       { id: 'fin-nisa', name: 'NISA・金融商品の税金', grade: 3, requires: ['fin-fund'] },
+      { id: 'fin-fx', name: '外貨建て金融商品', grade: 3, requires: ['fin-deposit'] },
+      { id: 'fin-law', name: '金融商品の関連法規', grade: 3, requires: ['fin-deposit'] },
       { id: 'fin-portfolio', name: 'ポートフォリオ理論', grade: 2, requires: ['fin-fund'] },
+      { id: 'fin-deriv', name: 'デリバティブ', grade: 2, requires: ['fin-portfolio'] },
     ],
   },
   {
